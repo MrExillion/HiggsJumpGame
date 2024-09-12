@@ -6,7 +6,7 @@ public class PlayerCore : MonoBehaviour
 {
 
     private bool freezePlayer = true;
-
+    private bool ignoreGravity = false;
 
 
 
@@ -24,6 +24,8 @@ public class PlayerCore : MonoBehaviour
         if(freezePlayer && LevelController.Singleton.IsLevelReady())
         {
             freezePlayer = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
            
     }
