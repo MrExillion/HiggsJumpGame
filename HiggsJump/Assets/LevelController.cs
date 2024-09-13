@@ -20,6 +20,7 @@ public class LevelController : MonoBehaviour
     private int isLevelReady = 0;
     private int readyWhen = 1;
     LevelData levelData;
+    public GameObject CurrentHiggsField;
     private void Awake()
     {
         if (Singleton == null)

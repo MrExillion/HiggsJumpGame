@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerCore : MonoBehaviour
 {
 
-    private bool freezePlayer = true;
+    public bool freezePlayer = true;
     private bool ignoreGravity = false;
 
 
