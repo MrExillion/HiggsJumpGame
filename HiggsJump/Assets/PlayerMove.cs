@@ -13,38 +13,33 @@ public class PlayerMove : MonoBehaviour
     }
     private void Update()
     {
+        if (GetComponent<PlayerCore>().freezePlayer)
+        {
+            return;
+        }
         moveforce = 50f;
-        moveforce = (moveforce - Time.fixedDeltaTime * moveforce) * (1 - Mathf.Min(rb.velocity.magnitude,5f)/5f);
         
+        //jumpforce = (jumpforce - Time.fixedDeltaTime * moveforce) * (1 - Mathf.Min(rb.velocity.y, 5f) / 5f);
+        moveforce = (moveforce - Time.deltaTime * moveforce) * (1 - Mathf.Min(rb.velocity.magnitude,5f)/5f);       
 
-
-
-        //Debug.Log(rb.velocity.y);
-
-        //if (rb.velocity.magnitude > 5f)
-        //{
-            
-        //    if (rb.velocity.magnitude > 0f)
-        //    {
-        //        moveforce = 1 - (moveforce / rb.GetAccumulatedForce().magnitude);
-        //    }
-        //    else
-        //    {
-        //        moveforce = 0;
-        //    }
-        //}
-
-        if(rb.velocity.y != 0)
+        if(Mathf.Round(rb.velocity.y * 100) != 0) // Hang time Behavior
         {
             jumpforce = 0;
             rb.drag = 0.2f;
             moveforce = 0;
         }
-        else
+        else //grounded behaviour
         {
             rb.drag = 3;
-            jumpforce = 10*9.810f;
+            jumpforce = 10 * 9.810f;
         }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+
+            rb.AddForce(gameObject.transform.up * jumpforce);
+        }
+
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -56,13 +51,20 @@ public class PlayerMove : MonoBehaviour
 
             rb.AddForce(gameObject.transform.forward * moveforce/2 * -1);
         }
-
-
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.D))
         {
 
-            rb.AddForce(gameObject.transform.up * jumpforce);
+            rb.AddForce(gameObject.transform.right * moveforce / 2);
         }
+        if (Input.GetKey(KeyCode.A))
+        {
+
+            rb.AddForce(gameObject.transform.right * moveforce / 2 * -1);
+        }
+
+
+
+
    
       if(Input.GetAxis("Mouse X") > 0)
         {
@@ -74,7 +76,21 @@ public class PlayerMove : MonoBehaviour
             gameObject.transform.Rotate(gameObject.transform.up, Input.GetAxis("Mouse X") * Time.fixedDeltaTime * 100);
 
         }
+        else
+        {
+            //do nothing
+        }
 
+       if (Input.GetAxis("Mouse Y") > 0 ) // && Camera.main.transform.rotation.eulerAngles.x < -90 )
+       {
+            Camera.main.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x + Input.GetAxis("Mouse Y") * -1 * Time.fixedDeltaTime * 100, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
+
+       }
+       else if (Input.GetAxis("Mouse Y") < 0 )//&& Camera.main.transform.rotation.eulerAngles.x > 90)
+       {
+            Camera.main.transform.eulerAngles = new Vector3(Camera.main.transform.eulerAngles.x + Input.GetAxis("Mouse Y") * -1 * Time.fixedDeltaTime * 100, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
+
+        }
 
     }
 
